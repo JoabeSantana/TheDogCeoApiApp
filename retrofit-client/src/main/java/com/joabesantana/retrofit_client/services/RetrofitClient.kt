@@ -1,25 +1,26 @@
-package com.joabesantana.thedogceoapiapp.services
+package com.joabesantana.retrofit_client.services
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitDogClient {
-    companion object {
-        private lateinit var INSTANCE: Retrofit
-        private const val BASE_URL = "https://api.thedogapi.com"
+class RetrofitClient {
 
-        private fun getRetrofitInstance(): Retrofit {
+    companion object {
+
+        private lateinit var INSTANCE: Retrofit
+
+        private fun getRetrofitInstance(baseUrl: String): Retrofit {
             if (!Companion::INSTANCE.isInitialized) {
                 val http = OkHttpClient.Builder()
-                INSTANCE = Retrofit.Builder().baseUrl(BASE_URL).client(http.build())
+                INSTANCE = Retrofit.Builder().baseUrl(baseUrl).client(http.build())
                     .addConverterFactory(GsonConverterFactory.create()).build()
             }
             return INSTANCE
         }
 
-        fun <T> createService(service: Class<T>): T {
-            return getRetrofitInstance().create(service)
+        fun <T> createService(baseUrl: String, service: Class<T>): T {
+            return getRetrofitInstance(baseUrl).create(service)
         }
     }
 }

@@ -2,21 +2,22 @@ package com.joabesantana.thedogceoapiapp.ui.dog
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.joabesantana.retrofit_client.services.RetrofitClient
 import com.joabesantana.thedogceoapiapp.model.Dog
 import com.joabesantana.thedogceoapiapp.utils.ListUtil
 import com.joabesantana.thedogceoapiapp.services.IDogService
-import com.joabesantana.thedogceoapiapp.services.RetrofitDogClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DogListViewModel : ViewModel() {
 
+    private val baseUrl = "https://api.thedogapi.com"
     private var dogListLiveData = MutableLiveData<MutableList<Dog>>()
 
     fun fetchDogs(page: Int, limit: Int, concatResults: Boolean) {
 
-        val service = RetrofitDogClient.createService(IDogService::class.java)
+        val service = RetrofitClient.createService(baseUrl, IDogService::class.java)
 
         val params: Map<String, String> = mapOf(
             "size" to "med",
@@ -39,7 +40,8 @@ class DogListViewModel : ViewModel() {
                     val dogsResults = response.body()
                     if (dogsResults != null) {
                         if (concatResults && dogListLiveData.value != null) {
-                            dogListLiveData.value = ListUtil.joinResults(dogListLiveData.value!!, dogsResults)
+                            dogListLiveData.value =
+                                ListUtil.joinResults(dogListLiveData.value!!, dogsResults)
                         } else {
                             dogListLiveData.value = dogsResults
                         }

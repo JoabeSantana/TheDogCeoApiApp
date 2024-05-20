@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "The Dog Ceo API App"
 include(":app")
+include(":retrofit-client")

@@ -29,17 +29,18 @@ class DogListActivity : AppCompatActivity() {
         gridView.adapter = dogAdapter
 
         dogViewModel = ViewModelProvider(this)[DogListViewModel::class.java]
-        dogViewModel.fetchDogs(++page, dogImagesLimit,false)
+        dogViewModel.fetchDogs(++page, dogImagesLimit, false)
 
         dogViewModel.getDogListLiveData().observe(this) { dogsList ->
             dogAdapter.setDogList(dogsList)
-            if(dogsList.size > dogImagesLimit){
-                Toast.makeText(this, "$dogImagesLimit more results below", Toast.LENGTH_SHORT).show()
+            if (dogsList.size > dogImagesLimit) {
+                Toast.makeText(this, "$dogImagesLimit more results below", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
         binding.btLoadMore.setOnClickListener {
-            dogViewModel.fetchDogs(++page, dogImagesLimit,true)
+            dogViewModel.fetchDogs(++page, dogImagesLimit, true)
         }
     }
 }
