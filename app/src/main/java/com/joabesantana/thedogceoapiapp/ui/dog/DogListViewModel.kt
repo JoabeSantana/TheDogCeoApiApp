@@ -39,7 +39,7 @@ class DogListViewModel : ViewModel() {
                     val dogsResults = response.body()
                     if (dogsResults != null) {
                         if (concatResults && dogListLiveData.value != null) {
-                            dogListLiveData.value = ListUtil.getConcatResults(dogListLiveData.value!!, dogsResults)
+                            dogListLiveData.value = ListUtil.joinResults(dogListLiveData.value!!, dogsResults)
                         } else {
                             dogListLiveData.value = dogsResults
                         }
