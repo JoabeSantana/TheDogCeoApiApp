@@ -3,6 +3,7 @@ package com.joabesantana.thedogceoapiapp.ui.dog
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.joabesantana.thedogceoapiapp.model.Dog
+import com.joabesantana.thedogceoapiapp.utils.ListUtil
 import com.joabesantana.thedogceoapiapp.services.IDogService
 import com.joabesantana.thedogceoapiapp.services.RetrofitDogClient
 import retrofit2.Call
@@ -13,9 +14,9 @@ class DogListViewModel : ViewModel() {
 
     private var dogListLiveData = MutableLiveData<MutableList<Dog>>()
 
-    fun fetchDogs(page: Int, concatResults: Boolean) {
+    fun fetchDogs(page: Int, limit: Int, concatResults: Boolean) {
 
-        val dogService = RetrofitDogClient.createService(IDogService::class.java)
+        val service = RetrofitDogClient.createService(IDogService::class.java)
 
         val params: Map<String, String> = mapOf(
             "size" to "med",
@@ -24,10 +25,10 @@ class DogListViewModel : ViewModel() {
             "has_breeds" to "true",
             "order" to "RANDOM",
             "page" to page.toString(),
-            "limit" to "10"
+            "limit" to limit.toString()
         )
 
-        val call = dogService.fetchDogs(params)
+        val call = service.fetchDogs(params)
 
         call.enqueue(object : Callback<MutableList<Dog>> {
 
@@ -38,10 +39,7 @@ class DogListViewModel : ViewModel() {
                     val dogsResults = response.body()
                     if (dogsResults != null) {
                         if (concatResults && dogListLiveData.value != null) {
-                            val results: MutableList<Dog> = ArrayList()
-                            results.addAll(dogListLiveData.value!!)
-                            results.addAll(dogsResults)
-                            dogListLiveData.value = results
+                            dogListLiveData.value = ListUtil.getConcatResults(dogListLiveData.value!!, dogsResults)
                         } else {
                             dogListLiveData.value = dogsResults
                         }

@@ -30,7 +30,7 @@
             android:id="@+id/btLoadMore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Load More Cute Dogs" />
+            android:text="Load More" />
     </LinearLayout>
 
 
